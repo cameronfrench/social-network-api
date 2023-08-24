@@ -24,7 +24,6 @@ const userSchema = new Schema(
       unique: true,
       required: 'Email address is required',
       validate: [validateEmail, 'Please fill a valid email address'],
-      match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
     },
     thoughts: [thoughtSchema],
     friends: [
@@ -41,6 +40,12 @@ const userSchema = new Schema(
   }
 );
 
+// Retrieves the length of the user's friends array field on query.
+postSchema.virtual('friendCount').get(function () {
+  return this.friends.length;
+});
+
+// Initialize our User model
 const User = model('user', userSchema);
 
 module.exports = User;
