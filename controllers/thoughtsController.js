@@ -66,4 +66,46 @@ async updateThought(req, res) {
     res.status(500).json(err);
   }
 },
+// create a reaction stored in a single thought's reactions array field
+async addThought(req, res) {
+  try {
+    console.log('You are adding a thought reaction');
+    console.log(req.body);
+    const thought = await Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $addToSet: { assignments: req.body } },
+      { runValidators: true, new: true }
+    );
+
+    if (!thought) {
+      return res
+        .status(404)
+        .json({ message: 'No thought found with that ID :(' })
+    }
+
+    res.json(thought);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+},
+// pull and remove a reaction by the reaction's reactionId value
+async removeThought(req, res) {
+  try {
+    const thought = await Thought.findOneAndUpdate(
+      { _id: req.params.studentId },
+      { $pull: { reaction: { reactionId: req.params.reactionId } } },
+      { runValidators: true, new: true }
+    );
+
+    if (!thought) {
+      return res
+        .status(404)
+        .json({ message: 'No thought found with that ID :(' });
+    }
+
+    res.json(thought);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+},
 };
