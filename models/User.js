@@ -25,7 +25,7 @@ const userSchema = new Schema(
       required: 'Email address is required',
       validate: [validateEmail, 'Please fill a valid email address'],
     },
-      thoughts: [
+    thoughts: [
       {
         type: Schema.Types.ObjectId,
         ref: 'Thought', // Reference to the Thought model
